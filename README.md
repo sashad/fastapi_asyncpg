@@ -10,7 +10,7 @@ I will try to do my best.
 
 Looking at fastapi ecosystem seems like everyone is trying to integrate
 fastapi with orms, but from my experience working with raw
-sql I'm so productive.
+sql I'm so productive. `Of course, yes!`
 
 If you think a bit around, your real model layer, is the schema on your
 db (you can add abastractions on top of it), but what ends
