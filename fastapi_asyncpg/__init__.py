@@ -13,7 +13,6 @@ async def noop(db: asyncpg.Connection):
 class configure_asyncpg:
     def __init__(
         self,
-        app: FastAPI,
         dsn: str,
         *,
         init_db: typing.Callable = None,  # callable for running sql on init
@@ -33,17 +32,15 @@ class configure_asyncpg:
             **options: connection options to directly pass to asyncpg driver
                 see: https://magicstack.github.io/asyncpg/current/api/index.html#connection-pools
         """
-        self.app = app
         self.dsn = dsn
         self.init_db = init_db
         self.con_opts = options
         self._pool = pool
-        self.app.router.add_event_handler("startup", self.on_connect)
-        self.app.router.add_event_handler("shutdown", self.on_disconnect)
 
-    async def on_connect(self):
+    async def on_connect(self, app):
         """handler called during initialitzation of asgi app, that connects to
         the db"""
+        self.app = app
         # if the pool is comming from outside (tests), don't connect it
         if self._pool:
             self.app.state.pool = self._pool
