@@ -56,6 +56,13 @@ async def initialization(conn):
     # you can run your db initialization code here
     await conn.execute("SELECT 1")
 
+@app.on_event("startup")
+async def startup_event():
+    await db.on_connect(app)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await db.on_disconnect()
 
 @app.get("/")
 async def get_content(db=Depends(db.connection)):
